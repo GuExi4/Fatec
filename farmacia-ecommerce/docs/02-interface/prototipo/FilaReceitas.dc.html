@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>FarmaOn – Validação de receitas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0F6B66;text-decoration:none}a:hover{color:#0A4F4B}
+</style>
+</helmet>
+<div style="min-height: 800px; box-sizing: border-box; background: #F5F7F6; font-family: Inter, system-ui, sans-serif; color: #14201F; display: flex; flex-direction: column">
+<header style="height: 60px; background: #14201F; color: #FFFFFF; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-wrap: wrap; gap: 8px">
+  <div style="font-size: 18px; font-weight: 700">Farma<span style="color: #B8F0E6">On</span> <span style="font-weight: 400; font-size: 14px; color: #C9D4D2">· Backoffice</span></div>
+  <div style="display: flex; align-items: center; gap: 20px"><span style="font-size: 13px; color: #E3EAE8">Farm. [NOME] · CRF-SP [Nº]</span><img src="/_blob/63848fd4256d8b769ffec41064645d56" alt="Grupo Wise" style="height: 34px; width: 108px"></div>
+</header>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px 24px; max-width: 1440px; width: 100%; box-sizing: border-box; margin: 0 auto">
+  <section aria-label="Fila de receitas" style="flex: 1 1 320px; max-width: 380px; display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline"><h1 style="margin: 0; font-size: 18px">Receitas pendentes</h1><span style="font-size: 13px; color: #4A5856">{{qtd}} na fila</span></div>
+    <sc-for list="{{fila}}" as="r" hint-placeholder-count="4">
+      <button onClick="{{r.pick}}" style="{{r.style}}">
+        <span style="display: flex; justify-content: space-between; width: 100%"><strong style="font-size: 14px">{{r.ped}}</strong><span style="font-size: 12px; color: #4A5856">{{r.tempo}}</span></span>
+        <span style="font-size: 13px; color: #4A5856">{{r.med}}</span>
+      </button>
+    </sc-for>
+  </section>
+  <section aria-label="Análise" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DCE5E3; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px"><h2 style="margin: 0; font-size: 18px">Pedido {{sel.ped}}</h2><span style="background: #FFF1DC; color: #7A4100; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px">Aguardando há {{sel.tempo}}</span></div>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px">
+      <div style="flex: 1 1 280px; min-height: 340px; background: #EEF2F1; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #4A5856; font-size: 13px">[imagem da receita · zoom e rotação]</div>
+      <div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 12px">
+        <div style="font-size: 13px; line-height: 1.6"><strong>Itens que exigem receita</strong><br>{{sel.med}}<br><strong>Paciente</strong><br>[NOME DO CLIENTE] · 54 anos</div>
+        <fieldset style="border: 1px solid #DCE5E3; border-radius: 12px; padding: 12px; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+          <legend style="font-weight: 600; padding: 0 4px">Checklist (RN03)</legend>
+          <label style="display: flex; gap: 8px; align-items: center"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #0F6B66">Legível e completa</label>
+          <label style="display: flex; gap: 8px; align-items: center"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #0F6B66">Nome do paciente confere</label>
+          <label style="display: flex; gap: 8px; align-items: center"><input type="checkbox" style="width: 18px; height: 18px; accent-color: #0F6B66">CRM e assinatura do prescritor</label>
+          <label style="display: flex; gap: 8px; align-items: center"><input type="checkbox" style="width: 18px; height: 18px; accent-color: #0F6B66">Dentro da validade (30 dias)</label>
+        </fieldset>
+        <label for="parecer" style="font-size: 13px; font-weight: 600">Parecer</label>
+        <textarea id="parecer" rows="3" style="border: 1px solid #9AAAA7; border-radius: 10px; padding: 10px; font: inherit; font-size: 13px; resize: vertical"></textarea>
+        <sc-if value="{{feito}}" hint-placeholder-val="{{false}}"><div role="status" style="background: #E3F4F1; color: #0A4F4B; border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600">{{msg}}</div></sc-if>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <button onClick="{{aprovar}}" style="flex: 1; height: 48px; border: 0; border-radius: 12px; background: #0F6B66; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Aprovar</button>
+          <button onClick="{{pedir}}" style="flex: 1; height: 48px; border-radius: 12px; border: 1.5px solid #0F6B66; background: #FFFFFF; color: #0F6B66; font: inherit; font-weight: 600; cursor: pointer">Pedir nova foto</button>
+          <button onClick="{{rejeitar}}" style="flex: 1; height: 48px; border-radius: 12px; border: 1.5px solid #A3262A; background: #FFFFFF; color: #A3262A; font: inherit; font-weight: 600; cursor: pointer">Rejeitar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { i: 0, msg: '' }; }
+  renderVals() {
+    const f = [
+      { ped: 'Nº 2026-004871', med: 'Losartana potássica 50 mg – 1 un.', tempo: '12 min' },
+      { ped: 'Nº 2026-004869', med: 'Atenolol 25 mg – 1 un.', tempo: '25 min' },
+      { ped: 'Nº 2026-004866', med: 'Sinvastatina 20 mg – 2 un.', tempo: '41 min' },
+      { ped: 'Nº 2026-004860', med: 'Metformina 850 mg – 1 un.', tempo: '1 h 05' }
+    ];
+    const sel = f[this.state.i];
+    return {
+      qtd: f.length, sel,
+      fila: f.map((r, i) => Object.assign({}, r, {
+        pick: () => this.setState({ i, msg: '' }),
+        style: 'text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border-radius: 12px; font: inherit; color: #14201F; cursor: pointer; min-height: 44px; ' + (i === this.state.i ? 'background: #E3F4F1; border: 1.5px solid #0F6B66' : 'background: #FFFFFF; border: 1px solid #DCE5E3')
+      })),
+      feito: !!this.state.msg, msg: this.state.msg,
+      aprovar: () => this.setState({ msg: 'Receita aprovada · pagamento capturado · pedido enviado para separação.' }),
+      pedir: () => this.setState({ msg: 'Cliente notificado para enviar nova imagem.' }),
+      rejeitar: () => this.setState({ msg: 'Receita rejeitada · pedido cancelado e autorização liberada.' })
+    };
+  }
+}
+</script>
+</body>
+</html>

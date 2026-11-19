@@ -1,0 +1,29 @@
+@startuml estados-pedido
+!include _estilo.iuml
+title Diagrama de Máquina de Estados – Pedido
+hide empty description
+[*] --> Criado : cliente finaliza carrinho
+Criado --> AguardandoPagamento : frete e forma\nde pagamento escolhidos
+Criado --> Cancelado : reserva expirou (30 min)
+AguardandoPagamento --> PagamentoAutorizado : gateway autoriza
+AguardandoPagamento --> Cancelado : pagamento recusado /\nPIX ou boleto vencido
+PagamentoAutorizado --> EmValidacaoReceita : [contém item\nque exige receita]
+PagamentoAutorizado --> Confirmado : [sem receita] / capturar
+EmValidacaoReceita --> Confirmado : receita aprovada / capturar
+EmValidacaoReceita --> Cancelado : receita rejeitada /\ncancelar autorização
+Confirmado --> EmSeparacao : atendente inicia separação
+Confirmado --> Cancelado : cliente cancela / estornar
+EmSeparacao --> Despachado : etiqueta + rastreio gerados
+Despachado --> Entregue : transportadora confirma
+Despachado --> EmDevolucao : entrega frustrada
+Entregue --> EmDevolucao : cliente solicita\n(até 7 dias – CDC)
+EmDevolucao --> Devolvido : item recebido / estornar
+Cancelado --> [*]
+Entregue --> [*] : após 7 dias
+Devolvido --> [*]
+state EmValidacaoReceita {
+  [*] --> Pendente
+  Pendente --> EmAnalise : farmacêutico abre
+  EmAnalise --> Pendente : solicita nova imagem
+}
+@enduml

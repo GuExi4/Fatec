@@ -1,0 +1,182 @@
+@startuml classes
+!include _estilo.iuml
+title Diagrama de Classes – Domínio do E-commerce FarmaOn
+hide empty methods
+
+abstract class Usuario {
+  - id: UUID
+  - nome: String
+  - email: String
+  - senhaHash: String
+  - ativo: boolean
+  + autenticar(email, senha): boolean
+  + alterarSenha(nova: String): void
+}
+class Cliente {
+  - cpf: String
+  - telefone: String
+  - dataNascimento: Date
+  - consentimentoLGPD: boolean
+  + adicionarEndereco(e: Endereco): void
+}
+abstract class Funcionario {
+  - matricula: String
+  - perfil: PerfilAcesso
+}
+class Farmaceutico {
+  - crf: String
+  - ufCrf: String
+  + validarReceita(r: Receita, parecer: String): void
+}
+class Atendente {
+  + separarPedido(p: Pedido): void
+  + despacharPedido(p: Pedido): void
+}
+class Administrador {
+  + gerenciarCatalogo(): void
+}
+class Endereco {
+  - cep: String
+  - logradouro: String
+  - numero: String
+  - complemento: String
+  - cidade: String
+  - uf: String
+  - principal: boolean
+}
+class Categoria {
+  - id: int
+  - nome: String
+}
+abstract class Produto {
+  - sku: String
+  - nome: String
+  - descricao: String
+  - preco: Decimal
+  - ativo: boolean
+  + precoComDesconto(): Decimal
+}
+class Medicamento {
+  - registroAnvisa: String
+  - principioAtivo: String
+  - tarja: TipoTarja
+  - exigeReceita: boolean
+  - generico: boolean
+}
+class ProdutoGeral {
+  - marca: String
+}
+class Lote {
+  - numero: String
+  - validade: Date
+  - quantidade: int
+  + disponivel(): int
+}
+class Carrinho {
+  - criadoEm: DateTime
+  + adicionar(p: Produto, qtd: int): void
+  + remover(sku: String): void
+  + total(): Decimal
+  + exigeReceita(): boolean
+}
+class ItemCarrinho {
+  - quantidade: int
+}
+class Pedido {
+  - numero: String
+  - dataHora: DateTime
+  - status: StatusPedido
+  - valorProdutos: Decimal
+  - valorFrete: Decimal
+  - desconto: Decimal
+  + total(): Decimal
+  + confirmar(): void
+  + cancelar(motivo: String): void
+}
+class ItemPedido {
+  - quantidade: int
+  - precoUnitario: Decimal
+  + subtotal(): Decimal
+}
+class Receita {
+  - arquivoUrl: String
+  - dataEmissao: Date
+  - crmMedico: String
+  - status: StatusReceita
+  - parecer: String
+}
+class Pagamento {
+  - forma: FormaPagamento
+  - valor: Decimal
+  - idTransacao: String
+  - status: StatusPagamento
+  + autorizar(): boolean
+  + capturar(): boolean
+  + estornar(): boolean
+}
+class Entrega {
+  - transportadora: String
+  - codigoRastreio: String
+  - prazoDias: int
+  - dataEntrega: Date
+}
+class Cupom {
+  - codigo: String
+  - percentual: Decimal
+  - validade: Date
+  + valido(): boolean
+}
+
+enum TipoTarja {
+  ISENTO
+  VERMELHA
+  PRETA
+}
+enum StatusPedido {
+  CRIADO
+  AGUARDANDO_PAGAMENTO
+  PAGAMENTO_AUTORIZADO
+  EM_VALIDACAO_RECEITA
+  CONFIRMADO
+  EM_SEPARACAO
+  DESPACHADO
+  ENTREGUE
+  CANCELADO
+  EM_DEVOLUCAO
+  DEVOLVIDO
+}
+enum StatusReceita {
+  PENDENTE
+  APROVADA
+  REJEITADA
+}
+enum FormaPagamento {
+  PIX
+  CARTAO_CREDITO
+  BOLETO
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Funcionario
+Funcionario <|-- Farmaceutico
+Funcionario <|-- Atendente
+Funcionario <|-- Administrador
+Produto <|-- Medicamento
+Produto <|-- ProdutoGeral
+
+Cliente "1" *-- "1..*" Endereco
+Cliente "1" -- "0..1" Carrinho
+Carrinho "1" *-- "0..*" ItemCarrinho
+ItemCarrinho "*" --> "1" Produto
+Categoria "1" -- "0..*" Produto
+Produto "1" *-- "0..*" Lote
+Cliente "1" -- "0..*" Pedido
+Pedido "1" *-- "1..*" ItemPedido
+ItemPedido "*" --> "1" Produto
+Pedido "1" -- "0..1" Receita
+Pedido "1" -- "1..*" Pagamento
+Pedido "1" -- "0..1" Entrega
+Pedido "*" --> "0..1" Cupom
+Pedido "1" --> "1" Endereco : entregaEm
+Farmaceutico "0..1" -- "0..*" Receita : valida
+@enduml

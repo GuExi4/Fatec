@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>FarmaOn – Acompanhar pedido</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0F6B66;text-decoration:none}a:hover{color:#0A4F4B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F5F7F6; font-family: Inter, system-ui, sans-serif; color: #14201F; display: flex; flex-direction: column; overflow: hidden">
+<header style="height: 60px; background: #FFFFFF; border-bottom: 1px solid #DCE5E3; display: flex; align-items: center; gap: 8px; padding: 0 8px; flex-shrink: 0">
+  <a href="Main.dc.html" aria-label="Voltar" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#14201F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+  <div style="display: flex; flex-direction: column; gap: 1px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.2px; color: #14201F">Farma<span style="color: #0F6B66">On</span></span>
+    <h1 style="margin: 0; font-size: 17px; font-weight: 600; line-height: 1.2">Acompanhar pedido</h1>
+  </div>
+  <img src="/_blob/29886984f162fe8b75b1578e6cb5d188" alt="Grupo Wise" style="height: 28px; width: 47px; margin-left: auto; margin-right: 8px">
+</header>
+<main style="flex: 1; overflow: hidden; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1px solid #DCE5E3; border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center"><div><div style="font-size: 13px; color: #4A5856">Pedido</div><div style="font-weight: 700">Nº 2026-004871</div></div><span style="background: #E3F4F1; color: #0A4F4B; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px">Em separação</span></div>
+<ol aria-label="Andamento do pedido" style="list-style: none; margin: 0; padding: 4px 0 0; display: flex; flex-direction: column">
+  <sc-for list="{{linha}}" as="e" hint-placeholder-count="6">
+    <li style="display: flex; gap: 12px; min-height: 52px">
+      <div style="display: flex; flex-direction: column; align-items: center; width: 22px"><span style="{{e.dot}}"></span><span style="{{e.bar}}"></span></div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 12px"><span style="{{e.txt}}">{{e.t}}</span><span style="font-size: 12px; color: #4A5856">{{e.s}}</span></div>
+    </li>
+  </sc-for>
+</ol>
+<div style="background: #FFFFFF; border: 1px solid #DCE5E3; border-radius: 14px; padding: 12px 14px; font-size: 13px; display: flex; flex-direction: column; gap: 4px"><strong style="font-size: 14px">Receita aprovada</strong><span style="color: #4A5856">Farm. [NOME] · CRF-SP [Nº] · hoje 10:42</span></div>
+<div style="display: flex; gap: 8px"><a href="#" style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 12px; border: 1.5px solid #0F6B66; color: #0F6B66; font-size: 15px; font-weight: 600; background: #FFFFFF; flex: 1">Cancelar pedido</a><a href="#" style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 12px; border: 1.5px solid #0F6B66; color: #0F6B66; font-size: 15px; font-weight: 600; background: #FFFFFF; flex: 1">Ajuda</a></div>
+</main>
+
+<nav aria-label="Navegação principal" style="height: 68px; background: #FFFFFF; border-top: 1px solid #DCE5E3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); flex-shrink: 0"><a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 400; color: #4A5856"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A5856" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Início</a><a href="Busca.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 400; color: #4A5856"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A5856" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>Busca</a><a href="Carrinho.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 400; color: #4A5856"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A5856" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.8L20 8H6"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="17" cy="20" r="1.4"></circle></svg>Carrinho (2)</a><a href="Pedido.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 600; color: #0F6B66"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0F6B66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"></path><path d="M4 7l8 4 8-4M12 11v10"></path></svg>Pedidos</a></nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ev = [
+      ['Pedido recebido', 'hoje 09:58', 'ok'], ['Pagamento autorizado (PIX)', 'hoje 09:59', 'ok'],
+      ['Receita aprovada', 'hoje 10:42', 'ok'], ['Em separação', 'agora', 'cur'],
+      ['Despachado', 'previsão hoje 16:00', 'next'], ['Entregue', 'previsão amanhã', 'next']
+    ];
+    return { linha: ev.map(([t, s, k], i) => ({ t, s,
+      dot: 'width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; ' + (k === 'next' ? 'background: #FFFFFF; border: 2px solid #9AAAA7' : k === 'cur' ? 'background: #FFFFFF; border: 4px solid #0F6B66' : 'background: #0F6B66; border: 2px solid #0F6B66'),
+      bar: 'width: 2px; flex: 1; ' + (i === ev.length - 1 ? 'background: transparent' : k === 'ok' ? 'background: #0F6B66' : 'background: #C9D4D2'),
+      txt: 'font-size: 14px; ' + (k === 'cur' ? 'font-weight: 700; color: #14201F' : k === 'ok' ? 'font-weight: 500; color: #14201F' : 'color: #4A5856')
+    })) };
+  }
+}
+</script>
+</body>
+</html>

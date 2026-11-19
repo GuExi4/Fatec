@@ -1,0 +1,57 @@
+@startuml sequencia-checkout
+!include _estilo.iuml
+title Diagrama de Sequência – UC05 Realizar pedido (com receita)
+autonumber
+actor Cliente
+participant "Front-end\n(Web/App)" as UI
+participant "PedidoController" as PC
+participant "CarrinhoService" as CS
+participant "EstoqueService" as ES
+participant "FreteService" as FS
+participant "Transportadora\n(API)" as T
+participant "PagamentoService" as PS
+participant "Gateway de\nPagamento" as GP
+participant "ReceitaService" as RS
+database "BD" as DB
+
+Cliente -> UI : Finalizar compra
+UI -> PC : POST /pedidos (carrinhoId, enderecoId)
+PC -> CS : obterCarrinho(carrinhoId)
+CS -> DB : SELECT itens
+DB --> CS : itens
+CS --> PC : carrinho
+PC -> ES : reservar(itens)
+alt estoque insuficiente
+  ES --> PC : erro(itens indisponíveis)
+  PC --> UI : 409 – itens indisponíveis
+  UI --> Cliente : Ajustar carrinho
+else estoque OK
+  ES --> PC : reserva (TTL 30 min)
+end
+PC -> FS : calcular(cep, peso)
+FS -> T : cotar frete
+T --> FS : opções (valor, prazo)
+FS --> PC : opções de frete
+PC --> UI : resumo + opções de frete
+Cliente -> UI : Escolhe frete e forma de pagamento
+UI -> PC : POST /pedidos/{id}/pagamento
+PC -> PS : autorizar(pedido, forma)
+PS -> GP : pré-autorização
+GP --> PS : autorizado (idTransacao)
+PS --> PC : PAGAMENTO_AUTORIZADO
+opt carrinho contém item que exige receita
+  PC --> UI : solicitar receita
+  Cliente -> UI : Envia foto/PDF da receita
+  UI -> RS : POST /receitas (arquivo)
+  RS -> DB : salvar (status = PENDENTE)
+  RS --> UI : protocolo
+  PC -> DB : status = EM_VALIDACAO_RECEITA
+  note over RS : Farmacêutico valida (UC12)\nem até 2 h úteis.\nSe rejeitada: estorno + CANCELADO
+end
+PC -> PS : capturar(idTransacao)
+PS -> GP : captura
+GP --> PS : capturado
+PC -> DB : status = CONFIRMADO
+PC --> UI : 201 – pedido confirmado (nº)
+UI --> Cliente : Confirmação + e-mail
+@enduml

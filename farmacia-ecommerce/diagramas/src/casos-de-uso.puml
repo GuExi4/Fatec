@@ -1,0 +1,61 @@
+@startuml casos-de-uso
+!include _estilo.iuml
+left to right direction
+title Diagrama de Casos de Uso – E-commerce Farmácia (FarmaOn)
+
+actor "Visitante" as V
+actor "Cliente" as C
+actor "Farmacêutico" as F
+actor "Atendente de\nPedidos" as A
+actor "Administrador" as ADM
+actor "Gateway de\nPagamento" <<sistema>> as GP
+actor "Transportadora" <<sistema>> as T
+C -|> V
+
+rectangle "Sistema E-commerce FarmaOn" {
+  usecase "UC01 Buscar e consultar\nprodutos" as UC01
+  usecase "UC02 Cadastrar-se" as UC02
+  usecase "UC03 Autenticar-se" as UC03
+  usecase "UC04 Gerenciar carrinho" as UC04
+  usecase "UC05 Realizar pedido\n(checkout)" as UC05
+  usecase "UC06 Calcular frete" as UC06
+  usecase "UC07 Efetuar pagamento" as UC07
+  usecase "UC08 Enviar receita\nmédica" as UC08
+  usecase "UC09 Aplicar cupom\nde desconto" as UC09
+  usecase "UC10 Acompanhar pedido" as UC10
+  usecase "UC11 Cancelar pedido /\nsolicitar devolução" as UC11
+  usecase "UC12 Validar receita" as UC12
+  usecase "UC13 Atendimento\nfarmacêutico (chat)" as UC13
+  usecase "UC14 Separar e expedir\npedido" as UC14
+  usecase "UC15 Gerenciar catálogo\ne estoque" as UC15
+  usecase "UC16 Gerenciar promoções\ne cupons" as UC16
+  usecase "UC17 Emitir relatórios" as UC17
+  usecase "UC18 Gerenciar usuários\ninternos" as UC18
+}
+
+V --> UC01
+V --> UC02
+V --> UC04
+C --> UC03
+C --> UC05
+C --> UC10
+C --> UC11
+C --> UC13
+F --> UC12
+F --> UC13
+A --> UC14
+ADM --> UC15
+ADM --> UC16
+ADM --> UC17
+ADM --> UC18
+
+UC05 ..> UC06 : <<include>>
+UC05 ..> UC07 : <<include>>
+UC05 ..> UC03 : <<include>>
+UC08 ..> UC05 : <<extend>>\n[item exige receita]
+UC09 ..> UC05 : <<extend>>\n[cliente informa cupom]
+UC07 --> GP
+UC06 --> T
+UC14 --> T
+UC11 --> GP
+@enduml

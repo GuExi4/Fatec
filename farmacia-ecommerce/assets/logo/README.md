@@ -1,0 +1,1 @@
+Logo do Grupo Wise em vetor: `grupo-wise-logo.svg` (fundo claro), `grupo-wise-logo-branca.svg` (fundo escuro), símbolos GW e PNGs de 2400 px com fundo transparente. Cores: azul-marinho #14295A e verde #23A047.
